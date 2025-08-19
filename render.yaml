@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: saleor-backend
+    env: python
+    plan: starter
+    buildCommand: chmod +x build.sh && ./build.sh
+    startCommand: chmod +x start.sh && ./start.sh
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.7
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+    healthCheckPath: /admin/
+    
+  - type: redis
+    name: saleor-redis
+    plan: starter
+    
+  - type: pserv
+    name: saleor-postgres
+    plan: starter
+    envVars:
+      - key: POSTGRES_DB
+        value: saleor
+      - key: POSTGRES_USER
+        value: saleor_user
+      - key: POSTGRES_PASSWORD
+        generateValue: true
+
+  - type: web
+    name: saleor-frontend
+    env: static
+    plan: starter
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/.next
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://saleor-backend.onrender.com
