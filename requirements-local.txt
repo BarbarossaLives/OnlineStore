@@ -1,0 +1,7 @@
+# Local development requirements (Windows-friendly)
+django==4.2.7
+whitenoise==6.6.0
+python-decouple==3.8
+
+# Note: Using SQLite for local development (no PostgreSQL required)
+# PostgreSQL will be used in production on Render
